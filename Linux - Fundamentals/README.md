@@ -1,4 +1,4 @@
-## 📚 Drescrição do Curso 
+## 📚 Descrição do Curso 
 
 ###  **Linux - Fundamentals**
    - **Descrição:** Aprenda a instalar, gerenciar usuários, manipular arquivos e dominar os comandos essenciais do Linux, com foco em habilidades práticas para servidores.
