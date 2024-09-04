@@ -1,3 +1,3 @@
 # 🚀 Repositório de Cursos e Projetos da DIO
 
-Este repositório contém os materiais e projetos desenvolvidos durante os cursos e bootcamps realizados na [Digital Innovation One](https://www.dio.me/). Aqui, você encontrará um resumo das atividades, projetos práticos e códigos fontes que acompanham meu aprendizado em diversas áreas da tecnologia.
+Bem-vindo ao meu repositório dedicado aos cursos e projetos realizados na [Digital Innovation One (DIO)](https://www.dio.me/). Este espaço serve como um portfólio do meu aprendizado contínuo em diversas áreas da tecnologia, como desenvolvimento de software, ciência de dados, e muito mais. Aqui, você encontrará um resumo detalhado de cada curso, os projetos práticos desenvolvidos, e os conhecimentos adquiridos ao longo dessa jornada.
