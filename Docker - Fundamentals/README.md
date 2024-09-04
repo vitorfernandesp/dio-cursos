@@ -1,7 +1,8 @@
-## 📚 Drescrição do Curso 
+## 📚 Descrição do Curso 
 
-###  **[Linux - Fundamentals]**
-   - **Descrição:** Aprenda a instalar, gerenciar usuários, manipular arquivos e dominar os comandos essenciais do Linux, com foco em habilidades práticas para servidores.
+###  **Docker - Fundamentals**
+   - **Descrição:** Aprenda a criar, testar e implementar contêineres Docker por meio de atividades práticas, começando com a compreensão de contêineres e seu funcionamento, seguido pelo uso de comandos básicos do Docker CLI em laboratórios virtuais.
+
    - **Projetos:**
-     - `linux-projeto1/` - (IaC) Script para a criação de usuários, grupos de usuários, diretórios e permissões no linux.
+     - `Docker-projeto1/` - Utilizando o Docker Compose para executar uma aplicação HTML em um Container Apache.
      - `linux-projeto2/` - (IaC) Script onde será provisionado um servidor web automaticamente.
