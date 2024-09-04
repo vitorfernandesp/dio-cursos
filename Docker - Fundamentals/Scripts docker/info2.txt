@@ -1,0 +1,20 @@
+links uteis2
+
+ 
+
+Links úteis
+Exemplos com Docker Compose 
+
+https://aws.amazon.com/pt/blogs/aws-brasil/como-conteinerizar-uma-aplicacao-em-15-minutos/ 
+
+  
+
+ O que é YAML? 
+
+https://www.redhat.com/pt-br/topics/automation/what-is-yaml
+
+  
+
+O que é o Docker Compose 
+
+https://blog.4linux.com.br/docker-compose-explicado/

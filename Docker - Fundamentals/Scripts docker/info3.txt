@@ -1,0 +1,10 @@
+Links úteis3
+O que é orquestração de containers? 
+
+https://www.redhat.com/pt-br/topics/containers/what-is-container-orchestration
+
+   
+
+Conhecendo melhor o Vagrant
+
+https://blog.mandic.com.br/artigos/devops-conhecendo-vagrant/
