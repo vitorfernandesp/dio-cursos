@@ -257,4 +257,4 @@ last -a: faz com que os hostnames sejam exibidos apenas na última coluna.
 Finalizando
 Hoje em dia, é possível criar e administrar usuários no GNU/Linux através de interfaces gráficas, tal como mostra a imagem abaixo, uma janela de administração de usuários da distribuição Ubuntu, exibida através do ambiente gráfico Gnome. No entanto, é importante saber como fazer essa tarefa por comandos para os casos onde somente o modo texto - isto é, um terminal de comandos - está disponível (situação que ocorre principalmente em servidores). Além disso, tal aprendizado ajuda na compreensão de como o GNU/Linux e outros sistemas baseados no Unix fazem o controle de grupos e usuários.
 
-Gerenciador de usuários do Ubuntu
+httpswww.infowester.comusuarioslinux.php
