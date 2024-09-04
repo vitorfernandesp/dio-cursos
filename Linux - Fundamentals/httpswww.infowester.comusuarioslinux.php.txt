@@ -1,0 +1,260 @@
+Criando e gerenciando usuários no GNU/Linux
+
+Introdução
+Uma das coisas que torna seguro o sistema operacional GNU/Linux (na verdade, qualquer sistema baseado no Unix), é a sua exigência de que cada coisa tenha dono e permissões de uso. Assim, para que seja possível restringir ou permitir o acesso e o uso de determinados recursos a uma ou mais pessoas, é necessário que cada uma tenha um usuário devidamente criado no sistema operacional. Mas, como criar usuários no Linux? Como alterar as características desses usuários? Como bloquear ou mesmo eliminar um usuário do sistema? É isso que você verá nas próximas linhas.
+
+
+Por que criar usuários no GNU/Linux?
+Criar uma conta para cada usuário no sistema operacional não serve apenas para restringir ou permitir o acesso aos recursos oferecidos, mas também para respeitar o espaço que cada pessoa tem. Com uma conta, uma pessoa poderá ter os seus próprios diretórios, personalizar o seu desktop, ter atalhos e configurações para os seus programas preferidos, entre outros. Além disso, mesmo que o computador onde o GNU/Linux está instalado seja usado apenas por uma pessoa, é recomendável criar um usuário próprio para ela. Mas, por qual motivo, se o sistema já conta com um usuário nativo, o root? O usuário root é o que "manda" no sistema, pois ele tem poderes de administrador, o que significa que ele tem acesso a todos os recursos do sistema operacional. Usá-lo no dia-a-dia não é recomendável, pois se o computador for tomado por outra pessoa ou se o próprio usuário fizer alguma coisa errada, o sistema operacional poderá ser seriamente comprometido.
+
+Respondendo a pergunta desse tópico com base nisso, a resposta é muito simples: deve-se criar usuários no GNU/Linux meramente para permitir a sua utilização por cada pessoa.
+
+
+
+Entendendo o controle de usuários no GNU/Linux
+Para criar, gerenciar ou eliminar contas de usuários no GNU/Linux, é necessário estar "logado" no sistema operacional com o usuário root (ou outro usuário que tenha privilégios de administrador). Os motivos para isso são óbvios: somente usuários autorizados é que podem manipular outras contas, do contrário, a segurança do sistema seria seriamente comprometida, pois qualquer usuário poderia criar, alterar ou apagar contas. Note que, dependendo das configurações do seu sistema, pode ser necessário executar cada instrução antecedida do comando 'sudo', como acontece por padrão com a distribuição Ubuntu.
+
+Antes de criar e controlar contas no GNU/Linux, é conveniente entender como o sistema operacional lida com isso. Em geral, cada conta criada fica armazenada em um arquivo de nome passwd localizado dentro do diretório /etc/ (ou seja, seu caminho completo é /etc/passwd). Esse arquivo contém várias informações sobre cada usuário:
+
+- o seu nome de login (ou seja, o nome que é necessário digitar para entrar no sistema);
+- senha (neste caso, a informação da senha pode estar criptografada ou em outro arquivo);
+- UID (User IDentification), ou seja, número de identificação do usuário;
+- GID (Group IDentification), isto é, número de identificação do grupo do usuário;
+- informações adicionais sobre o usuário (nome completo, dados de contato, etc);
+- diretório "home", ou seja, o diretório principal de cada usuário;
+- shell do usuário, uma espécie de programa que interpretará os comandos que o usuário digitar.
+
+
+Para que você possa entender melhor cada um desses itens, vamos analisá-los usando como base a linha abaixo extraída de um arquivo /etc/passwd, que mostra a posição que cada uma das informações acima ocupa:
+
+tintin:x:1001:500:TinTin,Belgica,846-846:/home/tintin:/bin/bash
+
+Note que cada parâmetro do usuário é separado por : (dois pontos). Vamos estudar cada um:
+
+tintin: é neste ponto que fica localizado o nome de login do usuário, neste caso, tintin. Esse nome não pode ser igual a outro já existente no sistema e, geralmente é limitado a 32 caracteres. Todavia, dependendo da configuração aplicada, o nome pode ser "case sensitive", ou seja, diferencia letras maiúsculas de minúsculas. Assim, 'wester' será diferente de 'wEster', por exemplo;
+
+x: essa posição indica a senha do usuário. A letra x informa que a senha está armazenada e protegida dentro do arquivo /etc/shadow. Se houver um asterisco (*) no lugar, significa que a conta está desativada. Todavia, se não houver nada, significa que não há senha para esse usuário. Em alguns casos, embora isso não seja recomendável, a senha pode estar inserida diretamente ali, mas criptografada;
+
+
+1001: esse campo indica o número UID (User IDentification) do usuário, mas você pode estar se perguntando o que é isso. Como o próprio nome informa, é número que serve para identificar o usuário. Em geral, o sistema pode suportar UIDs que vão de 0 a 4.294.967.296, embora alguns sistemas limitem esse número a valores inferiores. Normalmente, o UID 0 é atribuído pelo próprio GNU/Linux ao usuário root. O sistema também pode criar automaticamente usuários para a execução de determinadas rotinas e atribuir a eles UIDs baixos, como 1, 2, 3 e assim por diante. Note que, em nosso exemplo, o UID do usuário é 1001. Para usuários "humanos" do sistema, realmente é uma boa prática criar UIDs mais altas, para fins de organização;
+
+500: esse é o campo que indica o GID (Group IDentification) do usuário, isto é, o número de identificação do grupo do qual ele faz parte. Assim como no UID, geralmente o usuário 0 é indicado para o grupo do usuário root. Note, no entanto, que um mesmo usuário pode fazer parte de mais de um grupo (geralmente, o GNU/Linux permite a participação do usuário em até 32 grupos). Mas qual a vantagem de se ter mais de um grupo? Simples: suponha, por exemplo, que você queira que somente os funcionários do departamento contábil de sua empresa acessem os arquivos disponíveis na pasta /contabilidade/. Para isso, você cria um grupo e uma definição que faz com que apenas os usuários desse grupo tenham direito ao acesso. Feito isso, basta adicionar ao grupo cada usuário do departamento contábil. Assim, somente eles acessarão o diretório. Via de regra, o sistema operacional cria um grupo para cada conta de usuário criada;
+
+
+TinTin,Belgica,846-846: esse campo é muito interessante, pois permite a inclusão de informações adicionais sobre o usuário. Também chamado de GECOS (General Electric Comprehensive Operating System) em alusão a uma funcionalidade existente em um sistema operacional Unix que tinha esse nome, esse campo serve para, por exemplo, cadastrar o nome completo do usuário, seu endereço, seu telefone ou o seu ramal, etc. Cada informação é separada da outra por uma vírgula, por exemplo: Emerson Alecrim,Rua X,1234-4321. Na prática, você pode inserir as informações que achar melhor, não apenas os dados informados anteriormente;
+
+/home/tintin: cada usuário criado no sistema tem direito a uma pasta "home", ou seja, uma pasta sua, para uso exclusivo. É neste campo que você indica onde estará essa pasta. Em geral, essas pastas ficam dentro do diretório /home/, mas você pode definir o diretório que quiser (ou mesmo não indicar nenhum);
+
+/bin/bash: esse é o campo que informa qual o shell (interpretador de comandos) de login que o usuário utilizará. O GNU/Linux trabalha com vários, entre eles, o bash, o sh e o csh. Caso nenhum shell seja informado, o sistema utilizará o bash como padrão.
+
+
+Criando usuários no GNU/Linux
+Agora que você já conta com informações importantes sobre o gerenciamento de usuários no GNU/Linux, chegou a hora de criar contas. Para isso, você pode abrir um terminal e utilizar o comando adduser (dependendo do seu sistema, o comando pode ser somente/também useradd), que é aplicado da seguinte forma:
+
+adduser opções usuário
+
+Em opções, você pode colocar parâmetros específicos para a configuração da conta de usuário que será criada. Você pode usar vários parâmetros (veja uma lista completa digitando man adduser no terminal), entre eles:
+
+adduser -disabled-login usuário: faz com que a conta do usuário seja criada sem a solicitação de uma senha (ou seja, não executa o comando passwd). No entanto, a conta não poderá ser usada até que o usuário defina sua senha de acesso;
+
+adduser -force-badname usuário: em geral, os sistemas GNU/Linux checam se a conta criada pode ter em seu nome (ou mesmo na senha) algo que aumente os riscos ao sistema. Com esse comando, o sistema é instruído a não fazer esse tipo de verificação;
+
+Comando adduser -force-badname
+
+adduser -group grupo: com esse parâmetro, ao invés de uma conta de usuário, um grupo é criado. Para essa tarefa também pode-se utilizar o comando addgroup;
+
+adduser -home diretório usuário: com essa opção, você define em qual diretório ficará o "home" do usuário. Se esse parâmetro não for usado, o sistema criará o "home" no diretório padrão (geralmente, em /home/nome_do_usuário). Se preferir que nenhum diretório desse tipo seja criado, você pode utilizar a opção -no-create-home (não recomendável);
+
+adduser -uid número usuário: quando usuários são criados, o sistema geralmente adiciona a eles UIDs sequenciais, mas você pode especificar o UID que quiser usando o parâmetro uid seguido de um número, por exemplo, uid 31415. Note que, em muitas distribuições GNU/Linux, você pode utilizar apenas a letra u ao invés de uid. Note também que o GID do usuário será igual ao valor informado por você, a não ser que você especifique outro através da opção -gid, vista abaixo;
+
+adduser -gid número usuário: semelhante ao parâmetro acima, mas especifica manualmente um grupo para o usuário ao invés de criar um parâmetro. Note que, em muitas distribuições GNU/Linux, você pode utilizar apenas a letra g ao invés de gid. O gid informado deve ser o de um grupo já existente;
+
+adduser -ingroup grupo usuário: adiciona o usuário criado a um grupo já existente, ao invés de criar um novo grupo para ele;
+
+adduser -shell shell usuário: através desse parâmetro, você pode especificar qual será o shell padrão do usuário. Em alguns sistemas é possível usar a letra s ao invés da palavra shell.
+
+Para servir de exemplo, vamos criar um usuário de nome wester. Esse usuário deverá:
+
+- ter um UID de número 27182;
+- ser inserido no grupo infowester (já existente).
+
+Veja como ficará o comando:
+
+adduser -uid 27182 -ingroup infowester wester
+
+Assim que esse comando for digitado, o sistema pedirá que você digite duas vezes uma senha para o usuário. Em seguida, perguntará as informações adicionais, como nome completo, telefone, etc. Note que você pode deixar essas informações em branco, se preferir. Você deve ter notado pelo comando acima de que é possível utilizar mais de uma opção ao mesmo tempo no comando adduser.
+
+
+Eliminando usuários no GNU/Linux
+Se você precisa apagar um usuário, saiba que o procedimento é fácil. Basta digitar o comando userdel seguido do nome do usuário. Por exemplo:
+
+userdel voldmort
+
+Se além de eliminar esse usuário do sistema você quiser que sua pasta "home" seja apagada (junto com todo o seu conteúdo), basta digitar o comando userdel seguido do parâmetro -r e do nome do usuário:
+
+userdel -r voldemort
+
+Ao fazer isso, certifique-se que o usuário tem cópia de todos os arquivos a serem apagados, quando cabível.
+
+Apagando usuários com userdel
+
+Alterando e controlando a senha do usuário
+Por segurança, é recomendável alterar a senha de todos os usuários periodicamente. Para isso, usa-se o comando passwd. Se qualquer usuário quiser alterar a sua própria senha, basta digitar apenas passwd em um terminal. Quando isso ocorrer, o sistema pedirá que o usuário digite a sua senha atual e, em seguida, pedirá a nova seqüência, que deve ser informada duas vezes, para confirmação.
+
+O usuário root (ou outro que tenha privilégios de administrador) pode mudar não só a sua própria senha como a senha de todos os outros usuários do sistema. Para isso, o comando passwd também é usado e pode ser acrescido de opções:
+
+passwd usuário opções
+
+Eis algumas das opções disponíveis (para conhecer as outras, pode-se digitar o comando man passwd em um terminal):
+
+-e: faz com que a senha do usuário expire, forçando-o a fornecer uma nova combinação no próximo login;
+
+-k: permite a alteração da senha somente se esta estiver expirada;
+
+-x dias: faz com que a senha funcione apenas pela quantidade de dias informada. Depois disso, a senha expira e o usuário deve trocá-la;
+
+-n dias: indica a quantidade mínima de dias que o usuário deve aguardar para trocar a senha;
+
+-w dias: define a quantidade mínima de dias em que o usuário receberá o aviso de que sua senha precisa ser alterada;
+
+-i: deixa a conta inativa, caso a senha tenha expirado;
+
+-l: "tranca" a conta do usuário;
+
+-u: desbloqueia uma conta que esteja "trancada";
+
+-S: exibe o status da conta (note que a letra S deve estar em maiúscula).
+
+Vamos a alguns exemplos para que você possa entender essas opções:
+
+Suponha que você queira que a senha do usuário marvin expire após 30 dias. O comando é:
+
+passwd marvin -x 30
+
+Suponha, agora, que você queira que a senha do usuário bender expire após 14 dias e exiba uma mensagem de que é necessário trocar a senha três dias antes da data limite. O comando será o seguinte:
+
+passwd bender -x 14 -w 3
+
+Agora, vamos supor que você queira saber do status do usuário bender, para confirmar as alterações. Eis o comando:
+
+passwd bender -S
+
+O resultado exibido neste exemplo é:
+
+bender P 12_11_2007 0 14 3 -1
+
+A letra P acima informa que o usuário bender tem senha. Se não tivesse, no lugar de P estariam as letras NP. Se a conta do usuário estivesse bloqueada, apareceria a letra L. Por sua vez, a data que aparece na seqüência (no formato mês/dia/ano) informa a última alteração de senha que houve. As próximas quatro informações indicam, respectivamente, o período mínimo de utilização da senha, o período máximo (lembra que você definiu esse período com sendo de 14 dias?), o período de alerta (que você informou como sendo de 3 dias) e, por fim, o período de inatividade (quando não há inatividade, o resultado é -1).
+
+Alterando senha com passwd
+
+Como já informado antes, o GNU/Linux usa o arquivo /etc/shadow para lidar com as senhas de usuários. As informações desse arquivo têm o seguinte padrão (usando como exemplo os dados do usuário toad):
+
+toad:$1$O48MNVt9$08BBOTqV0cr2LtKtMXtAY1:13849:0:99999:7:::
+
+Assim como acontece no arquivo /etc/passwd, as informações do arquivo /etc/shadow são separadas por : (dois pontos). No caso acima, aparece o nome do usuário (toad), a senha criptografada (é por que isso que há esse monte de caracteres sem sentido), a data da última mudança (13849), a quantidade mínima de dias que o usuário deve esperar para mudar a sua senha (0), a quantidade máxima de dias para a alteração de senha ser feita (99999) e a quantidade de dias restantes à data de expiração que o sistema operacional deve esperar para exibir alertas de mudança de senha (7). Os demais campos (que estão em branco) são destinados à informações de expiração de conta, mas dificilmente são usados.
+
+Você pode ter se perguntado sobre o motivo das datas serem representadas por um único número, como o valor 13849, acima. Essa formato indica a quantidade de dias que já se passou desde 1 de janeiro de 1970.
+
+
+Gerenciando grupos
+Lidar com grupos no GNU/Linux é tarefa muito semelhante ao trabalho com usuários. Veja os principais comandos disponíveis:
+
+addgroup grupo: funciona de maneira igual ao comando adduser (inclusive algumas opções são as mesmas), no entanto, obviamente, cria grupos ao invés de usuários;
+
+groupdel grupo: serve para eliminar grupos do sistema;
+
+newgrp - grupo: com este comando é possível mudar o grupo efetivo do usuário, isto é, o grupo pertencente a ele, por um outro grupo do qual ele faz parte. Essa operação somente é executada caso o grupo tenha senha;
+
+groups usuário: mostra os grupos dos quais um usuário faz parte. Se quiser, por exemplo, saber os grupos do usuário gandalf, basta digitar em um terminal:
+
+groups gandalf
+
+As informações dos grupos são armazenadas no arquivo /etc/groups. Esse arquivo também indica quais usuários pertencem aos grupos existentes. Cada grupo contém uma linha com essas informações. Vamos analisar a seguinte linha de um arquivo /etc/groups para entender melhor como isso funciona:
+
+infowester:x:1002:wester,toad,marvin
+
+Assim como nos arquivos /etc/passwd e /etc/shadow, os campos da linha são separados por : (dois pontos). No exemplo acima, o primeiro campo indica o nome do grupo (infowester). O segundo campo informa a senha (sim, é possível definir senhas para grupos, embora raramente isso seja feito). Neste caso, usa-se x para indicar a ausência de senha. O terceiro campo informa o GID do grupo (1002) e, por fim, o quarto campo informa quais são os usuários pertencentes a esse grupo. Note que, neste exemplo, os usuários wester, toad e marvin fazem parte do grupo infowester. A lista de usuários deve ser separada por vírgulas, sem espaço entre os nomes.
+
+No que se refere a este assunto, é possível que encontre grupos em seu sistema que você não lembra de ter criado. Suponha, por exemplo, que você digitou o comando groups lestat para saber quais os grupos dos quais participa o usuário lestat, e o resultado foi o seguinte:
+
+lestat : lestat adm cdrom floppy audio video scanner lpadmin powerdev
+
+Note que o usuário lestat participa de vários grupos, sendo um deles o seu grupo principal, que leva o seu nome. Mas, de onde surgiram os demais? O GNU/Linux possui alguns grupos considerados "padrão", isto é, grupos que servem para permitir que o usuário execute determinadas tarefas. A quantidade e as finalidades dos grupos podem variar de acordo com a distribuição GNU/Linux utilizada e a sua configuração. Eis alguns grupos bastante comuns:
+
+cdrom: grupo para utilização de unidades de CD/DVD;
+audio: grupo para acesso aos recursos de áudio do computador;
+video: grupo para acesso aos recursos de vídeo do computador;
+floppy: grupo para utilização da unidade de disquete;
+adm: grupo para acesso de recursos administrativos.
+
+
+Alterando informações dos usuários
+Se você pode criar e apagar contas de usuários, pode também alterá-las. Isso é feito facilmente com o comando usermod, cujo funcionamento é semelhante ao comando adduser:
+
+usermod opções usuário
+
+Eis algumas de suas opções:
+
+usermod -d diretório usuário: altera o diretório "home" do usuário. Adicione -m no final para mover o conteúdo da pasta anterior para a nova. Por exemplo:
+
+usermod -d /financeiro -m peterpan
+
+usermod -e data usuário: define a data de expiração da conta do usuário. Em geral, a data é fornecida no esquema ano/mês/dia (aaaa-mm-dd). Por exemplo:
+
+usermod -e 2008-10-28 galadriel
+
+usermod -l novo_nome usuário: altera o nome do login do usuário. No exemplo abaixo, o usuário peterparker teve seu nome alterado para spiderman:
+
+usermod -l spiderman peterparker
+
+usermod -g grupo número usuário: altera o GID do grupo principal do usuário. Por exemplo:
+
+usermod -g 42 galadriel
+
+Comando usermod
+
+usermod -s shell usuário: altera o shell do usuário;
+
+usermod -u número usuário: altera o UID da conta do usuário.
+
+
+Comandos adicionais
+O GNU/Linux ainda conta com vários outros comandos que lhe ajudam a gerenciar e obter informações de usuários e grupos. Veja alguns:
+
+logname: mostra o nome do seu usuário;
+
+users: mostra os usuários que estão conectados ao sistema no momento;
+
+id: mostra dados da identificação do usuário. Eis algumas opções:
+
+id usuário: exibe os grupos (e seus respectivos GIDs) dos quais o usuário faz parte;
+
+id -g usuário: mostra o GID do grupo do usuário;
+
+id -G usuário: exibe o GID de todos os grupos do usuário (nome que a letra G fica em caixa alta);
+
+id -u usuário: indica o UID do usuário.
+
+finger usuário: mostra informações detalhadas do usuário. Se o comando for digitado isoladamente (ou seja, somente finger), o sistema exibe todos os usuários que estão conectados no sistema operacional no momento;
+
+Comando finger
+
+chfn usuário: comando para mudar as informações adicionais do usuário (nome completo, telefone, etc).
+
+last: o comando last é bastante interessante e útil, pois mostra os últimos usuários que estiveram logados no sistema, os terminais usados por eles para se conectar, o hostname (quando a conexão é feita remotamente), as datas e os horários de utilização do computador, assim como o tempo de permanência no sistema. Esses dados geralmente são obtidos do arquivo de logs /var/log/wtmp. O last também possui opções. Veja algumas:
+
+last -n número: mostra apenas as últimas linhas do log. Para definir a quantidade de linhas, substitua número pelo valor desejado. Por exemplo:
+
+last -n 10
+
+last -x: mostra os dados de desligamento do sistema, assim como informações do nível de execução;
+
+last -R: faz com que o comando não exiba os hostnames (note que a letra R fica em caixa alta);
+
+last -a: faz com que os hostnames sejam exibidos apenas na última coluna.
+
+
+Finalizando
+Hoje em dia, é possível criar e administrar usuários no GNU/Linux através de interfaces gráficas, tal como mostra a imagem abaixo, uma janela de administração de usuários da distribuição Ubuntu, exibida através do ambiente gráfico Gnome. No entanto, é importante saber como fazer essa tarefa por comandos para os casos onde somente o modo texto - isto é, um terminal de comandos - está disponível (situação que ocorre principalmente em servidores). Além disso, tal aprendizado ajuda na compreensão de como o GNU/Linux e outros sistemas baseados no Unix fazem o controle de grupos e usuários.
+
+Gerenciador de usuários do Ubuntu
