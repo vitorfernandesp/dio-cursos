@@ -6,4 +6,4 @@ Aprenda a criar, testar e implementar contêineres Docker por meio de atividades
 
    - **Projetos:**
      - `Docker-projeto1/` - Utilizando o Docker Compose para executar uma aplicação HTML em um Container Apache.
-     - `linux-projeto2/` - (IaC) Script onde será provisionado um servidor web automaticamente.
+     - `Docker-projeto2/` - Criar um Cluster Swarm local com máquinas virtuais e Vagrant, automatizando implementações para aumentar a eficiência.
