@@ -6,7 +6,7 @@ Aprenda desde os fundamentos da linguagem Python até o domínio no tratamento d
 
 
    - **Projetos:**
-
+      - Projeto1 - Sistema Bancário em Python, implementando as operações de depósito, saque e extrato através de conhecimentos básicos de Python um sistema funcional e eficiente, simulando operações bancárias de forma prática.
 
 
 
