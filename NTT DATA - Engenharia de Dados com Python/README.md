@@ -2,7 +2,8 @@
 
 ###  **NTT DATA - Engenharia de Dados com Python**
 
-Aprenda desde a linguagem Python até o domínio no tratamento de Dados e dashboard com PowerBI do jeito que é feito na NTT DATA, pilares da programação orientada a objetos, consumindo APIS em python utilizando Spark e python com PySpark para Análise de Dados e processos de ETL Inteligentes utilizando python e Pandas, como criar e otimizar consultas SQL na prática e conceitos de Arquitetura e Cloud.
+Aprenda desde os fundamentos da linguagem Python até o domínio no tratamento de dados e criação de dashboards com PowerBI, seguindo as práticas da NTT DATA. Explore os pilares da programação orientada a objetos, o consumo de APIs em Python, e o uso de Spark e PySpark para análises de dados. Descubra como implementar processos de ETL inteligentes com Python e Pandas, e domine a criação e otimização de consultas SQL na prática, além de conceitos essenciais de arquitetura e computação em nuvem.
+
 
    - **Projetos:**
 
